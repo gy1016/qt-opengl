@@ -1,11 +1,22 @@
 #include "MyOpenGLWidget.h"
 
-unsigned int VBO, VAO;
+unsigned int VBO, VAO, EBO;
 unsigned int shaderProgram;
+// 三角形
+//float vertices[] = {
+//	-0.5f, -0.5f, 0.0f,
+//	0.5f, -0.5f, 0.0f,
+//	0.0f, 0.5f, 0.0f
+//};
 float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
+	0.5f, 0.5f, 0.0f,
 	0.5f, -0.5f, 0.0f,
-	0.0f, 0.5f, 0.0f
+	-0.5f, -0.5f, 0.0f,
+	-0.5f, 0.5f, 0.0f,
+};
+unsigned int indices[] = {
+	0, 1, 3,
+	1, 2, 3
 };
 const char* vertexShaderSource = "#version 330 core\nlayout (location = 0) in vec3 aPox;\n void main()\n{\ngl_Position = vec4(aPox, 1.0);\n}\0";
 const char* fragmentShaderSource = "#version 330 core\nout vec4 FragColor;\nvoid main()\n{\nFragColor = vec4(1.0f,0.5f,0.2f,1.0f);\n}\0";
@@ -18,16 +29,20 @@ void MyOpenGLWidget::initializeGL()
 {
 	initializeOpenGLFunctions();
 	
-	// 创建VBO和VAO对象，并赋予ID
+	// 创建VBO, EBO和VAO对象，并赋予ID
 	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &EBO);
 	glGenBuffers(1, &VBO);
 
-	// 绑定VBO和VAO对象
+	// 绑定VBO, VAO和EBO对象
 	glBindVertexArray(VAO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	// 向指定的target缓冲填充数据
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 
 	// 告知显卡如何解析缓冲里的属性值
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -90,6 +105,10 @@ void MyOpenGLWidget::paintGL()
 	glUseProgram(shaderProgram);
 	// 要用的时候先绑定
 	glBindVertexArray(VAO);
-	// 开始绘制
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	// VBO开始绘制
+	// glDrawArrays(GL_TRIANGLES, 0, 3);
+	// 多边形填充模式
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	// EBO开始绘制
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
