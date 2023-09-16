@@ -15,6 +15,11 @@ public:
     sample_1(QWidget *parent = nullptr);
     ~sample_1();
 
+private slots:
+    void on_drawRect_triggered();
+    void on_clearGraphic_triggered();
+    void on_drawWireFrame_triggered();
+
 private:
     Ui::sample_1Class *ui;
 };

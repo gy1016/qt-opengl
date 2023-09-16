@@ -25,10 +25,36 @@ MyOpenGLWidget::MyOpenGLWidget(QWidget* parent) : QOpenGLWidget(parent) {
 
 }
 
+MyOpenGLWidget::~MyOpenGLWidget()
+{
+	makeCurrent();
+	glDeleteBuffers(1, &VBO);
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteProgram(shaderProgram);
+	doneCurrent();
+}
+
+void MyOpenGLWidget::drawShape(Shape shape)
+{
+	m_shape = shape;
+	update();
+}
+
+void MyOpenGLWidget::setWireFrame(bool enable)
+{
+	makeCurrent();
+	if (enable)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	update();
+	doneCurrent();
+}
+
 void MyOpenGLWidget::initializeGL()
 {
 	initializeOpenGLFunctions();
-	
+
 	// 创建VBO, EBO和VAO对象，并赋予ID
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &EBO);
@@ -100,15 +126,21 @@ void MyOpenGLWidget::paintGL()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+
 	// 先使用绑定好的shader程序
 	glUseProgram(shaderProgram);
 	// 要用的时候先绑定
 	glBindVertexArray(VAO);
 	// VBO开始绘制
 	// glDrawArrays(GL_TRIANGLES, 0, 3);
-	// 多边形填充模式
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	// EBO开始绘制
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	switch (m_shape)
+	{
+	case MyOpenGLWidget::None:
+		break;
+	case MyOpenGLWidget::Rect:
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		break;
+	default:
+		break;
+	}
 }

@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>sample_1</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="MyOpenGLWidget" name="openGLWidget">
     <property name="geometry">
@@ -48,8 +51,29 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="drawRect"/>
+   <addaction name="clearGraphic"/>
+   <addaction name="drawWireFrame"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="drawRect">
+   <property name="text">
+    <string>画一个矩形</string>
+   </property>
+  </action>
+  <action name="clearGraphic">
+   <property name="text">
+    <string>清空图形</string>
+   </property>
+  </action>
+  <action name="drawWireFrame">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>线框渲染</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

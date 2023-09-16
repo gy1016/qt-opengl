@@ -12,3 +12,18 @@ sample_1::~sample_1()
 {
     delete ui;
 }
+
+void sample_1::on_drawRect_triggered()
+{
+    ui->openGLWidget->drawShape(MyOpenGLWidget::Rect);
+}
+
+void sample_1::on_clearGraphic_triggered()
+{
+    ui->openGLWidget->drawShape(MyOpenGLWidget::None);
+}
+
+void sample_1::on_drawWireFrame_triggered()
+{
+    ui->openGLWidget->setWireFrame(ui->drawWireFrame->isChecked());
+}
