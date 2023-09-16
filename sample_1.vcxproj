@@ -100,6 +100,11 @@
   <ItemGroup>
     <ResourceCompile Include="sample_1.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="polygon.frag" />
+    <None Include="polygon.vert" />
+    <None Include="shaders1.bin" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

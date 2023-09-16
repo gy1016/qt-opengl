@@ -18,8 +18,6 @@ unsigned int indices[] = {
 	0, 1, 3,
 	1, 2, 3
 };
-const char* vertexShaderSource = "#version 330 core\nlayout (location = 0) in vec3 aPox;\n void main()\n{\ngl_Position = vec4(aPox, 1.0);\n}\0";
-const char* fragmentShaderSource = "#version 330 core\nout vec4 FragColor;\nvoid main()\n{\nFragColor = vec4(1.0f,0.5f,0.2f,1.0f);\n}\0";
 
 MyOpenGLWidget::MyOpenGLWidget(QWidget* parent) : QOpenGLWidget(parent) {
 
@@ -29,8 +27,8 @@ MyOpenGLWidget::~MyOpenGLWidget()
 {
 	makeCurrent();
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 	glDeleteVertexArrays(1, &VAO);
-	glDeleteProgram(shaderProgram);
 	doneCurrent();
 }
 
@@ -79,42 +77,9 @@ void MyOpenGLWidget::initializeGL()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	int success;
-	char infoLog[512];
-	// 顶点着色器
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		qDebug() << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog;
-	}
-
-	// 片段着色器
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		qDebug() << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog;
-	}
-
-	// 编译着色器
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(shaderProgram, 512, NULL, infoLog);
-		qDebug() << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog;
-	}
-
-	// 编译完就不用了，删掉
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex, "polygon.vert");
+	shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment, "polygon.frag");
+	shaderProgram.link();
 }
 
 void MyOpenGLWidget::resizeGL(int w, int h)
@@ -128,7 +93,7 @@ void MyOpenGLWidget::paintGL()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// 先使用绑定好的shader程序
-	glUseProgram(shaderProgram);
+	shaderProgram.bind();
 	// 要用的时候先绑定
 	glBindVertexArray(VAO);
 	// VBO开始绘制

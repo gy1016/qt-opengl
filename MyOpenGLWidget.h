@@ -1,6 +1,7 @@
 #pragma once
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QtOpenGL/QOpenGLFunctions_3_3_Core>
+#include <QtOpenGL/QOpenGLShaderProgram>
 
 class MyOpenGLWidget :
 	public QOpenGLWidget, QOpenGLFunctions_3_3_Core
@@ -22,5 +23,6 @@ signals:
 public slots:
 private:
 	Shape m_shape;
+	QOpenGLShaderProgram shaderProgram;
 };
 

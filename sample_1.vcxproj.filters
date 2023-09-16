@@ -21,6 +21,9 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="Resource Files\shaders">
+      <UniqueIdentifier>{22c85e4b-efc0-4ecb-9eff-11f90528e21e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="sample_1.qrc">
@@ -56,5 +59,16 @@
     <ResourceCompile Include="sample_1.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders1.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="polygon.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="polygon.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
