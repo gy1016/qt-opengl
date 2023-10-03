@@ -24,6 +24,9 @@
     <Filter Include="Resource Files\shaders">
       <UniqueIdentifier>{22c85e4b-efc0-4ecb-9eff-11f90528e21e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\images">
+      <UniqueIdentifier>{9dcba808-0f69-4f1c-8cbb-05c308f57458}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="sample_1.qrc">
@@ -70,5 +73,13 @@
     <None Include="polygon.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="wall.jpg">
+      <Filter>Resource Files\images</Filter>
+    </Image>
+    <Image Include="smile.jpg">
+      <Filter>Resource Files\images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

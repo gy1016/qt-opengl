@@ -105,6 +105,10 @@
     <None Include="polygon.vert" />
     <None Include="shaders1.bin" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="smile.jpg" />
+    <Image Include="wall.jpg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

@@ -2,6 +2,7 @@
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QtOpenGL/QOpenGLFunctions_3_3_Core>
 #include <QtOpenGL/QOpenGLShaderProgram>
+#include <QtOpenGL/QOpenGLTexture>
 
 class MyOpenGLWidget :
 	public QOpenGLWidget, QOpenGLFunctions_3_3_Core
@@ -24,5 +25,7 @@ public slots:
 private:
 	Shape m_shape;
 	QOpenGLShaderProgram shaderProgram;
+	QOpenGLTexture* textureWall;
+	QOpenGLTexture* textureSmile;
 };
 

@@ -9,10 +9,10 @@ unsigned int shaderProgram;
 //	0.0f, 0.5f, 0.0f
 //};
 float vertices[] = {
-	0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-	0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-	-0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f,
+	0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+	0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+	-0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
 };
 unsigned int indices[] = {
 	0, 1, 3,
@@ -69,11 +69,16 @@ void MyOpenGLWidget::initializeGL()
 
 
 	// 告知显卡如何解析缓冲里的属性值
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	// 开启VAO管理的第一个属性值
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+	textureWall = new QOpenGLTexture(QImage("wall.jpg").mirrored());
+	textureSmile = new QOpenGLTexture(QImage("smile.jpg").mirrored());
 
 	// 释放
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -91,11 +96,14 @@ void MyOpenGLWidget::resizeGL(int w, int h)
 
 void MyOpenGLWidget::paintGL()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// 先使用绑定好的shader程序
 	shaderProgram.bind();
+
+	shaderProgram.setUniformValue("textureWall", 0);
+	shaderProgram.setUniformValue("textureSmile", 1);
 	// 要用的时候先绑定
 	glBindVertexArray(VAO);
 	// VBO开始绘制
@@ -105,6 +113,10 @@ void MyOpenGLWidget::paintGL()
 	case MyOpenGLWidget::None:
 		break;
 	case MyOpenGLWidget::Rect:
+		// glActiveTexture(GL_TEXTURE0);
+		textureWall->bind(0);
+		// glActiveTexture(GL_TEXTURE1);
+		textureSmile->bind(1);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		break;
 	default:
