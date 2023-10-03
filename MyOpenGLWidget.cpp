@@ -18,9 +18,13 @@ unsigned int indices[] = {
 	0, 1, 3,
 	1, 2, 3
 };
+float ratio = 0.5;
 
 MyOpenGLWidget::MyOpenGLWidget(QWidget* parent) : QOpenGLWidget(parent) {
-
+	// 不写这句话获取不到键盘事件
+	setFocusPolicy(Qt::StrongFocus);
+	connect(&timer, &QTimer::timeout, this, &MyOpenGLWidget::on_timeout);
+	timer.start(100);
 }
 
 MyOpenGLWidget::~MyOpenGLWidget()
@@ -96,6 +100,10 @@ void MyOpenGLWidget::resizeGL(int w, int h)
 
 void MyOpenGLWidget::paintGL()
 {
+	QMatrix4x4 matrix;
+	unsigned int time = QTime::currentTime().msec();
+	matrix.rotate(time, 0.0f, 0.0f, 1.0f);
+
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -117,7 +125,7 @@ void MyOpenGLWidget::paintGL()
 		textureWall->bind(0);
 		// glActiveTexture(GL_TEXTURE1);
 		textureSmile->bind(1);
-
+		shaderProgram.setUniformValue("modelMatrix", matrix);
 		// 多级纹理相关
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
@@ -129,4 +137,29 @@ void MyOpenGLWidget::paintGL()
 	default:
 		break;
 	}
+}
+
+void MyOpenGLWidget::keyPressEvent(QKeyEvent* event)
+{
+	switch (event->key())
+	{
+	case Qt::Key_Up:
+		ratio += 0.1;
+		break;
+	case Qt::Key_Down:
+		ratio -= 0.1;
+		break;
+	default:
+		break;
+	}
+	if (ratio > 1) ratio = 1;
+	if (ratio < 0) ratio = 0;
+	shaderProgram.bind();
+	shaderProgram.setUniformValue("ratio", ratio);
+	update();
+}
+
+void MyOpenGLWidget::on_timeout()
+{
+	update();
 }

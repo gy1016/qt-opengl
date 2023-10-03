@@ -4,10 +4,11 @@ in vec2 texCord;
 
 uniform sampler2D textureWall;
 uniform sampler2D textureSmile;
+uniform float ratio;
 
 out vec4 FragColor;
 
 void main(){
-	FragColor = mix(texture(textureWall, texCord), texture(textureSmile, texCord), 0.5);
+	FragColor = mix(texture(textureWall, texCord), texture(textureSmile, texCord), ratio);
 	// FragColor = vec4(1.0);
 }

@@ -3,6 +3,9 @@
 #include <QtOpenGL/QOpenGLFunctions_3_3_Core>
 #include <QtOpenGL/QOpenGLShaderProgram>
 #include <QtOpenGL/QOpenGLTexture>
+#include <QTime>
+#include <QTimer>
+#include <QKeyEvent>
 
 class MyOpenGLWidget :
 	public QOpenGLWidget, QOpenGLFunctions_3_3_Core
@@ -19,13 +22,16 @@ protected:
 	virtual void initializeGL();
 	virtual void resizeGL(int w, int h);
 	virtual void paintGL();
+	void keyPressEvent(QKeyEvent *event);
 signals:
 
 public slots:
+	void on_timeout();
 private:
 	Shape m_shape;
 	QOpenGLShaderProgram shaderProgram;
 	QOpenGLTexture* textureWall;
 	QOpenGLTexture* textureSmile;
+	QTimer timer;
 };
 
